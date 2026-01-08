@@ -1,29 +1,31 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Terminal } from "lucide-react";
 
 const navItems = [
-  { id: "about", label: "Sobre" },
-  { id: "projects", label: "Projetos" },
-  { id: "expertise", label: "Expertise" },
-  { id: "contact", label: "Contato" },
+  { id: "about", label: "SOBRE", num: "01" },
+  { id: "projects", label: "TRABALHOS", num: "02" },
+  { id: "expertise", label: "SKILLS", num: "03" },
+  { id: "contact", label: "CONTATO", num: "04" },
 ];
 
 export const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearInterval(timer);
+    };
   }, []);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setIsMobileMenuOpen(false);
   };
 
@@ -32,134 +34,93 @@ export const Navigation = () => {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "glass py-3" : "py-5"
+          isScrolled ? "bg-background/95 backdrop-blur-sm border-b-2 border-foreground" : ""
         }`}
         role="navigation"
         aria-label="Navegação principal"
       >
-        <div className="container mx-auto px-6 flex justify-between items-center">
+        <div className="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
           {/* Logo */}
-          <motion.button
-            className="flex items-center gap-2 text-xl font-bold text-foreground"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          <button
             onClick={() => scrollToSection("hero")}
+            className="group flex items-center gap-2"
             aria-label="Ir para o início"
           >
-            <Terminal className="w-5 h-5 text-primary" aria-hidden="true" />
-            <span className="font-mono">T_AMORIM</span>
-          </motion.button>
+            <div className="w-10 h-10 bg-primary flex items-center justify-center border-2 border-foreground group-hover:bg-foreground transition-colors">
+              <span className="text-primary-foreground font-mono font-bold text-lg group-hover:text-background transition-colors">
+                T
+              </span>
+            </div>
+            <span className="hidden sm:block font-mono text-xs text-muted-foreground">
+              {time.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+              <span className="animate-blink">:</span>
+              {time.getSeconds().toString().padStart(2, "0")}
+            </span>
+          </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item, index) => (
-              <motion.button
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 uppercase tracking-wider font-medium"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index }}
-                whileHover={{ y: -2 }}
-                aria-label={`Ir para seção ${item.label}`}
+                className="group px-4 py-2 font-mono text-sm tracking-wider text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-all"
+                aria-label={`Ir para ${item.label}`}
               >
+                <span className="text-primary text-xs mr-1">{item.num}</span>
                 {item.label}
-              </motion.button>
+              </button>
             ))}
           </div>
 
           {/* Mobile Menu Button */}
-          <motion.button
-            className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
+          <button
+            className="md:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 border-2 border-foreground bg-background hover:bg-foreground group transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            whileTap={{ scale: 0.95 }}
             aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={isMobileMenuOpen}
-            aria-controls="mobile-menu"
           >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" aria-hidden="true" />
-            ) : (
-              <Menu className="w-6 h-6" aria-hidden="true" />
-            )}
-          </motion.button>
+            <span className={`w-5 h-0.5 bg-foreground group-hover:bg-background transition-all ${isMobileMenuOpen ? "rotate-45 translate-y-2" : ""}`} />
+            <span className={`w-5 h-0.5 bg-foreground group-hover:bg-background transition-all ${isMobileMenuOpen ? "opacity-0" : ""}`} />
+            <span className={`w-5 h-0.5 bg-foreground group-hover:bg-background transition-all ${isMobileMenuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+          </button>
         </div>
       </motion.nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Full Screen */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <>
-            {/* Overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-hidden="true"
-            />
-
-            {/* Menu Panel */}
-            <motion.div
-              id="mobile-menu"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-72 glass z-50 md:hidden"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Menu de navegação"
-            >
-              <div className="flex flex-col h-full pt-20 px-6">
-                <nav className="flex flex-col gap-2">
-                  {navItems.map((item, index) => (
-                    <motion.button
-                      key={item.id}
-                      onClick={() => scrollToSection(item.id)}
-                      className="text-left py-4 px-4 text-lg text-muted-foreground hover:text-primary hover:bg-accent/50 rounded-lg transition-all duration-300 uppercase tracking-wider"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 * index }}
-                      aria-label={`Ir para seção ${item.label}`}
-                    >
-                      {item.label}
-                    </motion.button>
-                  ))}
-                </nav>
-
-                {/* Social Links */}
-                <div className="mt-auto pb-8">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4">
-                    Conecte-se
-                  </p>
-                  <div className="flex gap-4">
-                    <a
-                      href="https://github.com/TarcysAmorim"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-primary transition-colors"
-                      aria-label="GitHub de Tarcys Amorim"
-                    >
-                      GitHub
-                    </a>
-                    <a
-                      href="https://linkedin.com/in/tarcys"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-primary transition-colors"
-                      aria-label="LinkedIn de Tarcys Amorim"
-                    >
-                      LinkedIn
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-background md:hidden"
+          >
+            <div className="h-full flex flex-col justify-center items-center gap-4 p-8">
+              {navItems.map((item, index) => (
+                <motion.button
+                  key={item.id}
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 50 }}
+                  transition={{ delay: index * 0.1 }}
+                  onClick={() => scrollToSection(item.id)}
+                  className="group flex items-baseline gap-4 text-5xl font-bold hover:text-primary transition-colors"
+                >
+                  <span className="font-mono text-sm text-primary">{item.num}</span>
+                  <span className="text-outline-thin group-hover:text-primary">{item.label}</span>
+                </motion.button>
+              ))}
+            </div>
+            
+            {/* Corner decoration */}
+            <div className="absolute bottom-8 left-8 font-mono text-xs text-muted-foreground">
+              <div>MOGI MIRIM, SP</div>
+              <div>-22.4319° / -46.9578°</div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

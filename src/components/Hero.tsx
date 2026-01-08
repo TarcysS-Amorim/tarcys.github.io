@@ -1,165 +1,212 @@
 import { motion } from "framer-motion";
-import { Terminal, Shield, Code, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
+
+const roles = [
+  "FULL-STACK DEV",
+  "SECURITY RESEARCHER", 
+  "PROBLEM SOLVER",
+  "CODE BREAKER",
+];
 
 export const Hero = () => {
-  const scrollToAbout = () => {
-    const element = document.getElementById("about");
-    element?.scrollIntoView({ behavior: "smooth" });
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % roles.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  const scrollToProjects = () => {
+    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-background"
       aria-label="Seção principal"
     >
-      {/* Background Grid */}
-      <div className="absolute inset-0 grid-pattern opacity-50" aria-hidden="true" />
+      {/* Grid Background */}
+      <div className="absolute inset-0 grid-brutal opacity-30" aria-hidden="true" />
+      
+      {/* Floating shapes that follow cursor */}
+      <motion.div
+        className="absolute w-96 h-96 border border-primary/20 rotate-45"
+        style={{
+          left: mousePos.x * 0.02,
+          top: mousePos.y * 0.02,
+        }}
+        transition={{ type: "spring", stiffness: 50 }}
+        aria-hidden="true"
+      />
+      <motion.div
+        className="absolute right-0 bottom-0 w-64 h-64 bg-primary/5"
+        style={{
+          right: mousePos.x * 0.01,
+          bottom: mousePos.y * 0.01,
+        }}
+        transition={{ type: "spring", stiffness: 30 }}
+        aria-hidden="true"
+      />
 
-      {/* Gradient Orbs */}
-      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-        <motion.div
-          className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute -bottom-40 -left-40 w-96 h-96 bg-cyber-purple/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      </div>
+      {/* Main Content */}
+      <div className="flex-1 flex items-center relative z-10">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-6xl">
+            {/* Status */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex items-center gap-3 mb-8"
+            >
+              <div className="w-3 h-3 bg-primary animate-pulse" />
+              <span className="font-mono text-sm text-muted-foreground uppercase tracking-widest">
+                Disponível para projetos
+              </span>
+            </motion.div>
 
-      {/* Content */}
-      <div className="container mx-auto px-6 z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Terminal Tag */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8"
-          >
-            <span className="w-2 h-2 bg-primary rounded-full animate-glow-pulse" aria-hidden="true" />
-            <span className="text-sm font-mono text-muted-foreground">
-              Disponível para projetos
-            </span>
-          </motion.div>
+            {/* Name */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="mb-4"
+            >
+              <h1 className="text-[clamp(3rem,15vw,12rem)] font-bold leading-[0.85] tracking-tighter">
+                <span className="text-outline block">TARCYS</span>
+                <span className="block">
+                  <span className="highlight-box">AMORIM</span>
+                </span>
+              </h1>
+            </motion.div>
 
-          {/* Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 tracking-tight"
-          >
-            <span className="text-foreground">Olá, eu sou </span>
-            <span className="gradient-text">Tarcys</span>
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto text-balance"
-          >
-            Full-Stack Developer & Cybersecurity Specialist.
-            <br />
-            <span className="text-foreground font-medium">
-              Construo, quebro e reconstruo o mundo digital.
-            </span>
-          </motion.p>
-
-          {/* Skills Tags */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-wrap justify-center gap-3 mb-12"
-          >
-            {[
-              { icon: Code, label: "Full-Stack" },
-              { icon: Shield, label: "Security" },
-              { icon: Terminal, label: "DevOps" },
-            ].map((item, index) => (
+            {/* Role Switcher */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="h-12 mb-8 overflow-hidden"
+            >
               <motion.div
-                key={item.label}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary/50 border border-border"
-                whileHover={{ scale: 1.05, borderColor: "hsl(var(--primary))" }}
-                transition={{ duration: 0.2 }}
+                key={roleIndex}
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -50, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="font-mono text-xl md:text-2xl text-primary"
               >
-                <item.icon className="w-4 h-4 text-primary" aria-hidden="true" />
-                <span className="text-sm font-medium">{item.label}</span>
+                {`> ${roles[roleIndex]}_`}
               </motion.div>
-            ))}
-          </motion.div>
+            </motion.div>
 
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
-            <motion.a
-              href="#projects"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all duration-300 glow"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="text-lg md:text-xl text-muted-foreground max-w-xl mb-12 leading-relaxed"
             >
-              Ver Projetos
-            </motion.a>
-            <motion.a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="inline-flex items-center justify-center px-8 py-4 rounded-lg border border-border text-foreground font-semibold hover:bg-accent transition-all duration-300"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              Construindo software que importa. 
+              Quebrando sistemas para torná-los mais fortes.
+              <br />
+              <span className="text-foreground font-medium">
+                Código é arte. Segurança é ciência.
+              </span>
+            </motion.p>
+
+            {/* CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="flex flex-wrap gap-4"
             >
-              Entre em Contato
-            </motion.a>
-          </motion.div>
+              <button
+                onClick={scrollToProjects}
+                className="magnetic-btn px-8 py-4 text-sm"
+              >
+                VER TRABALHOS
+              </button>
+              <a
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="px-8 py-4 text-sm font-bold uppercase tracking-wider border-2 border-foreground hover:bg-foreground hover:text-background transition-colors"
+              >
+                CONTATO
+              </a>
+            </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.button
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-primary transition-colors"
-        onClick={scrollToAbout}
+      {/* Bottom Marquee */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        aria-label="Rolar para próxima seção"
+        transition={{ delay: 0.8 }}
+        className="border-t-2 border-b-2 border-foreground py-4 bg-primary overflow-hidden"
+      >
+        <div className="marquee">
+          <div className="marquee-content">
+            {[...Array(2)].map((_, i) => (
+              <div key={i} className="flex items-center gap-8 text-primary-foreground font-bold text-sm tracking-widest whitespace-nowrap">
+                <span>REACT</span>
+                <span className="text-2xl">◆</span>
+                <span>TYPESCRIPT</span>
+                <span className="text-2xl">◆</span>
+                <span>NODE.JS</span>
+                <span className="text-2xl">◆</span>
+                <span>PYTHON</span>
+                <span className="text-2xl">◆</span>
+                <span>PENTESTING</span>
+                <span className="text-2xl">◆</span>
+                <span>LINUX</span>
+                <span className="text-2xl">◆</span>
+                <span>DOCKER</span>
+                <span className="text-2xl">◆</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        className="absolute bottom-24 right-8 hidden md:block"
       >
         <motion.div
-          animate={{ y: [0, 8, 0] }}
+          animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
+          className="font-mono text-xs text-muted-foreground writing-mode-vertical rotate-180"
+          style={{ writingMode: "vertical-rl" }}
         >
-          <ChevronDown className="w-8 h-8" aria-hidden="true" />
+          SCROLL ↓
         </motion.div>
-      </motion.button>
+      </motion.div>
+
+      {/* Corner Numbers */}
+      <div className="absolute top-24 right-8 font-mono text-xs text-muted-foreground hidden md:block">
+        <div>LAT -22.4319</div>
+        <div>LON -46.9578</div>
+      </div>
     </section>
   );
 };

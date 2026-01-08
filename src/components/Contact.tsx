@@ -1,239 +1,196 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Mail, Github, Linkedin, Send, MapPin, ArrowUpRight } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUpRight, Send } from "lucide-react";
 import { toast } from "sonner";
 
-const socialLinks = [
-  {
-    name: "GitHub",
-    icon: Github,
-    href: "https://github.com/TarcysAmorim",
-    label: "Perfil no GitHub",
-  },
-  {
-    name: "LinkedIn",
-    icon: Linkedin,
-    href: "https://linkedin.com/in/tarcys",
-    label: "Perfil no LinkedIn",
-  },
-  {
-    name: "Email",
-    icon: Mail,
-    href: "mailto:contato@tarcys.dev",
-    label: "Enviar email",
-  },
+const socials = [
+  { name: "GITHUB", href: "https://github.com/TarcysAmorim", icon: Github },
+  { name: "LINKEDIN", href: "https://linkedin.com/in/tarcys", icon: Linkedin },
+  { name: "EMAIL", href: "mailto:contato@tarcys.dev", icon: Mail },
 ];
 
 export const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    toast.success("Mensagem enviada com sucesso!", {
-      description: "Entrarei em contato em breve.",
-    });
-
+    await new Promise((r) => setTimeout(r, 1000));
+    toast.success("Mensagem enviada!", { description: "Retorno em breve." });
     setFormData({ name: "", email: "", message: "" });
     setIsSubmitting(false);
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
   };
 
   return (
     <section
       id="contact"
-      className="section"
+      className="section bg-background"
       aria-labelledby="contact-title"
     >
-      <div className="container mx-auto px-6">
-        <div ref={ref} className="max-w-6xl mx-auto">
+      <div className="container mx-auto px-4 md:px-6">
+        <div ref={ref} className="max-w-7xl mx-auto">
           {/* Section Header */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5 }}
+            className="flex items-center gap-4 mb-16"
           >
-            <span className="text-primary font-mono text-sm uppercase tracking-widest">
-              Contato
-            </span>
-            <h2
-              id="contact-title"
-              className="text-3xl md:text-5xl font-bold mt-4 mb-6"
-            >
-              Vamos Conversar?
+            <span className="font-mono text-primary text-sm">04</span>
+            <div className="h-px flex-1 bg-border" />
+            <h2 id="contact-title" className="text-sm font-mono tracking-widest text-muted-foreground">
+              CONTATO
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-              Tem um projeto em mente ou quer discutir uma oportunidade? 
-              Estou sempre aberto a novos desafios.
+          </motion.div>
+
+          {/* Big CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mb-20"
+          >
+            <h3 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] mb-8">
+              VAMOS<br />
+              <span className="highlight-box">TRABALHAR</span><br />
+              <span className="text-outline">JUNTOS?</span>
+            </h3>
+            <p className="text-xl text-muted-foreground max-w-xl">
+              Tem um projeto em mente? Precisa de alguém para quebrar seu sistema 
+              (de forma legal)? Ou só quer trocar uma ideia?
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Info */}
+          <div className="grid lg:grid-cols-2 gap-16">
+            {/* Left - Social Links */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-8"
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="space-y-4"
             >
-              {/* Location Card */}
-              <div className="glass rounded-2xl p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 rounded-xl bg-primary/10">
-                    <MapPin className="w-5 h-5 text-primary" aria-hidden="true" />
+              <p className="font-mono text-sm text-muted-foreground mb-8">
+                // CONECTE-SE
+              </p>
+              
+              {socials.map((social, index) => (
+                <motion.a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                  className="group flex items-center justify-between p-6 border-2 border-border hover:border-foreground hover:bg-foreground hover:text-background transition-all"
+                >
+                  <div className="flex items-center gap-4">
+                    <social.icon className="w-6 h-6" />
+                    <span className="text-xl font-bold">{social.name}</span>
+                  </div>
+                  <ArrowUpRight className="w-6 h-6 group-hover:rotate-0 -rotate-45 transition-transform" />
+                </motion.a>
+              ))}
+
+              {/* Location Info */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.8 }}
+                className="pt-8 border-t-2 border-dashed border-border mt-8"
+              >
+                <div className="grid grid-cols-2 gap-4 font-mono text-sm">
+                  <div>
+                    <p className="text-muted-foreground mb-1">LOCAL</p>
+                    <p>Mogi Mirim, SP</p>
                   </div>
                   <div>
-                    <h3 className="font-semibold">Localização</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Mogi Mirim, São Paulo - Brasil
-                    </p>
+                    <p className="text-muted-foreground mb-1">TIMEZONE</p>
+                    <p>GMT-3</p>
                   </div>
                 </div>
-                <p className="text-muted-foreground text-sm">
-                  Disponível para trabalhos remotos e presenciais na região.
-                </p>
-              </div>
-
-              {/* Social Links */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Redes Sociais</h3>
-                <div className="space-y-3">
-                  {socialLinks.map((link, index) => (
-                    <motion.a
-                      key={link.name}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={isInView ? { opacity: 1, x: 0 } : {}}
-                      transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                      className="flex items-center justify-between p-4 rounded-xl bg-secondary/30 hover:bg-secondary/50 border border-transparent hover:border-primary/30 transition-all duration-300 group"
-                      aria-label={link.label}
-                    >
-                      <div className="flex items-center gap-3">
-                        <link.icon
-                          className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors"
-                          aria-hidden="true"
-                        />
-                        <span className="font-medium">{link.name}</span>
-                      </div>
-                      <ArrowUpRight
-                        className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all"
-                        aria-hidden="true"
-                      />
-                    </motion.a>
-                  ))}
-                </div>
-              </div>
+              </motion.div>
             </motion.div>
 
-            {/* Contact Form */}
+            {/* Right - Contact Form */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <form
-                onSubmit={handleSubmit}
-                className="glass rounded-2xl p-6 md:p-8 space-y-6"
-              >
+              <p className="font-mono text-sm text-muted-foreground mb-8">
+                // ENVIE UMA MENSAGEM
+              </p>
+
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium mb-2"
-                  >
-                    Nome
+                  <label htmlFor="name" className="block font-mono text-sm mb-2">
+                    NOME *
                   </label>
                   <input
                     type="text"
                     id="name"
                     name="name"
                     value={formData.name}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    className="w-full px-4 py-3 rounded-lg bg-secondary/50 border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    className="w-full px-4 py-4 bg-secondary border-2 border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors font-mono"
                     placeholder="Seu nome"
                   />
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium mb-2"
-                  >
-                    Email
+                  <label htmlFor="email" className="block font-mono text-sm mb-2">
+                    EMAIL *
                   </label>
                   <input
                     type="email"
                     id="email"
                     name="email"
                     value={formData.email}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
-                    className="w-full px-4 py-3 rounded-lg bg-secondary/50 border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    className="w-full px-4 py-4 bg-secondary border-2 border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors font-mono"
                     placeholder="seu@email.com"
                   />
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium mb-2"
-                  >
-                    Mensagem
+                  <label htmlFor="message" className="block font-mono text-sm mb-2">
+                    MENSAGEM *
                   </label>
                   <textarea
                     id="message"
                     name="message"
                     value={formData.message}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     required
                     rows={5}
-                    className="w-full px-4 py-3 rounded-lg bg-secondary/50 border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
-                    placeholder="Conte-me sobre seu projeto..."
+                    className="w-full px-4 py-4 bg-secondary border-2 border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors font-mono resize-none"
+                    placeholder="Sua mensagem..."
                   />
                 </div>
 
-                <motion.button
+                <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 rounded-lg bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all glow"
-                  whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
-                  whileTap={{ scale: isSubmitting ? 1 : 0.99 }}
+                  className="magnetic-btn w-full py-5 flex items-center justify-center gap-3 disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                      Enviando...
+                      <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin" />
+                      ENVIANDO...
                     </>
                   ) : (
                     <>
-                      <Send className="w-5 h-5" aria-hidden="true" />
-                      Enviar Mensagem
+                      <Send className="w-5 h-5" />
+                      ENVIAR MENSAGEM
                     </>
                   )}
-                </motion.button>
+                </button>
               </form>
             </motion.div>
           </div>
@@ -244,18 +201,18 @@ export const Contact = () => {
       <motion.footer
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.6, delay: 0.8 }}
-        className="mt-20 pt-8 border-t border-border"
+        transition={{ duration: 0.5, delay: 1 }}
+        className="mt-32 border-t-2 border-foreground"
       >
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <p>
-              © {new Date().getFullYear()} Tarcys Amorim. Todos os direitos
-              reservados.
-            </p>
-            <p className="font-mono text-xs">
-              Feito com 💚 e muito café
-            </p>
+        <div className="container mx-auto px-4 md:px-6 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="font-mono text-sm text-muted-foreground">
+              © {new Date().getFullYear()} TARCYS AMORIM
+            </div>
+            <div className="font-mono text-xs text-muted-foreground flex items-center gap-2">
+              <span className="w-2 h-2 bg-primary animate-pulse" />
+              BUILT WITH PASSION & COFFEE
+            </div>
           </div>
         </div>
       </motion.footer>
