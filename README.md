@@ -1,73 +1,124 @@
-# Welcome to your Lovable project
+# Portfolio - Tarcys Amorim
 
-## Project info
+Portfolio pessoal desenvolvido com React, TypeScript, Vite e Tailwind CSS. Design brutalista com foco em performance e acessibilidade.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 🚀 Tecnologias
 
-## How can I edit this code?
+- **React 18** - Biblioteca UI
+- **TypeScript** - Tipagem estática
+- **Vite** - Build tool e dev server
+- **Tailwind CSS** - Estilização
+- **Framer Motion** - Animações
+- **React Hook Form + Zod** - Validação de formulários
+- **EmailJS** - Envio de emails
+- **React Query** - Gerenciamento de estado
+- **shadcn/ui** - Componentes UI
 
-There are several ways of editing your application.
+## 📦 Instalação
 
-**Use Lovable**
+```bash
+# Instalar dependências
+npm install
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Iniciar servidor de desenvolvimento
 npm run dev
+
+# Build para produção
+npm run build
+
+# Preview do build
+npm run preview
 ```
 
-**Edit a file directly in GitHub**
+## ⚙️ Configuração
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### EmailJS (Formulário de Contato)
 
-**Use GitHub Codespaces**
+1. Crie uma conta em [EmailJS](https://www.emailjs.com/)
+2. Crie um serviço de email
+3. Crie um template de email
+4. Copie `.env.example` para `.env` e preencha:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```env
+VITE_EMAILJS_SERVICE_ID=seu_service_id
+VITE_EMAILJS_TEMPLATE_ID=seu_template_id
+VITE_EMAILJS_PUBLIC_KEY=sua_public_key
+```
 
-## What technologies are used for this project?
+### Google Analytics (Opcional)
 
-This project is built with:
+Para habilitar analytics, adicione no `.env`:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```env
+VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
 
-## How can I deploy this project?
+## 🏗️ Estrutura do Projeto
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```
+src/
+├── components/       # Componentes React
+│   ├── ui/          # Componentes shadcn/ui
+│   ├── About.tsx
+│   ├── Contact.tsx
+│   ├── ErrorBoundary.tsx
+│   ├── Expertise.tsx
+│   ├── Hero.tsx
+│   ├── Navigation.tsx
+│   └── Projects.tsx
+├── hooks/           # Custom hooks
+│   ├── use-analytics.ts
+│   └── use-mobile.tsx
+├── lib/             # Utilitários
+│   ├── analytics.ts
+│   ├── email-service.ts
+│   ├── utils.ts
+│   └── validation.ts
+├── pages/           # Páginas
+│   ├── Index.tsx
+│   └── NotFound.tsx
+└── App.tsx          # Componente principal
+```
 
-## Can I connect a custom domain to my Lovable project?
+## ✨ Funcionalidades
 
-Yes, you can!
+- ✅ Design responsivo e acessível
+- ✅ Animações suaves com Framer Motion
+- ✅ Formulário de contato com validação
+- ✅ Error Boundary para tratamento de erros
+- ✅ Lazy loading de componentes
+- ✅ Analytics integrado (opcional)
+- ✅ TypeScript strict mode
+- ✅ SEO otimizado
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🎨 Design
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+O design segue o estilo **brutalista** com:
+- Alto contraste
+- Bordas grossas
+- Tipografia monospace
+- Cores vibrantes (lime green como primária)
+- Efeitos visuais (scanlines, grid, marquee)
+
+## 🔧 Scripts
+
+- `npm run dev` - Inicia servidor de desenvolvimento
+- `npm run build` - Build para produção
+- `npm run build:dev` - Build em modo desenvolvimento
+- `npm run preview` - Preview do build
+- `npm run lint` - Executa ESLint
+
+## 📝 Licença
+
+Este projeto é privado e pessoal.
+
+## 👤 Autor
+
+**Tarcys Amorim**
+- GitHub: [@TarcysAmorim](https://github.com/TarcysAmorim)
+- LinkedIn: [tarcys](https://linkedin.com/in/tarcys)
+- Email: contato@tarcys.dev
+
+---
+
+Built with passion & coffee ☕

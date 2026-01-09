@@ -40,7 +40,7 @@ export class EmailService {
     }
 
     try {
-      // Dynamically import EmailJS only when needed
+      // Import EmailJS - named export
       const emailjs = await import("@emailjs/browser");
       
       await emailjs.send(
@@ -55,7 +55,9 @@ export class EmailService {
         this.PUBLIC_KEY
       );
     } catch (error) {
-      console.error("Error sending email:", error);
+      if (import.meta.env.DEV) {
+        console.error("Error sending email:", error);
+      }
       throw new Error(
         error instanceof Error
           ? `Falha ao enviar email: ${error.message}`

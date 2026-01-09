@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 @layer base {
   :root {
@@ -16,9 +16,9 @@
     --popover: 0 0% 7%;
     --popover-foreground: 0 0% 98%;
 
-    /* Accent - Electric Lime */
-    --primary: 75 100% 50%;
-    --primary-foreground: 0 0% 4%;
+    /* Accent - Electric Red */
+    --primary: 0 100% 50%;
+    --primary-foreground: 0 0% 98%;
 
     /* Secondary */
     --secondary: 0 0% 12%;
@@ -35,12 +35,12 @@
 
     --border: 0 0% 20%;
     --input: 0 0% 12%;
-    --ring: 75 100% 50%;
+    --ring: 0 100% 50%;
 
     --radius: 0px;
 
     /* Extended Brutalist Palette */
-    --neon-lime: 75 100% 50%;
+    --neon-lime: 0 100% 50%;
     --neon-pink: 330 100% 60%;
     --neon-blue: 200 100% 60%;
     --dark-surface: 0 0% 8%;
@@ -48,7 +48,7 @@
     /* Harsh Shadows */
     --shadow-brutal: 8px 8px 0px hsl(0 0% 0%);
     --shadow-brutal-sm: 4px 4px 0px hsl(0 0% 0%);
-    --shadow-neon: 0 0 60px hsl(75 100% 50% / 0.3);
+    --shadow-neon: 0 0 60px hsl(0 100% 50% / 0.3);
   }
 }
 
@@ -74,8 +74,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.03;
-    z-index: 9999;
+    opacity: 0.04;
+    z-index: 1;
     background: repeating-linear-gradient(
       0deg,
       transparent,
@@ -93,6 +93,16 @@
 
   :focus-visible {
     @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+    outline-offset: 2px;
+  }
+
+  /* Improve focus visibility for better accessibility */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    @apply ring-2 ring-primary ring-offset-2;
   }
 }
 
@@ -143,16 +153,21 @@
     display: flex;
     overflow: hidden;
     user-select: none;
-    gap: 2rem;
+    width: 100%;
+    position: relative;
   }
 
   .marquee-content {
-    flex-shrink: 0;
     display: flex;
-    justify-content: space-around;
+    flex-shrink: 0;
     gap: 2rem;
-    min-width: 100%;
-    animation: marquee 20s linear infinite;
+    animation: marquee 30s linear infinite;
+    will-change: transform;
+    width: fit-content;
+  }
+  
+  .marquee-content:hover {
+    animation-play-state: paused;
   }
 
   /* Magnetic button */
@@ -180,13 +195,16 @@
 
   /* Outline text */
   .text-outline {
-    -webkit-text-stroke: 2px hsl(var(--foreground));
-    color: transparent;
+    -webkit-text-stroke: 3px hsl(var(--foreground));
+    color: hsl(var(--foreground));
+    position: relative;
   }
 
   .text-outline-thin {
     -webkit-text-stroke: 1px hsl(var(--foreground));
     color: transparent;
+    position: relative;
+    z-index: 10;
   }
 
   /* Mono font */
@@ -234,12 +252,13 @@
 
   /* Highlight box */
   .highlight-box {
-    display: inline;
+    display: inline-block;
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
     padding: 0.1em 0.3em;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
+    position: relative;
   }
 }
 
@@ -278,8 +297,12 @@
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+  0% { 
+    transform: translateX(0); 
+  }
+  100% { 
+    transform: translateX(calc(-50% - 1rem)); 
+  }
 }
 
 @keyframes float-brutal {

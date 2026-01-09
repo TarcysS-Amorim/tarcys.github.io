@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactFormSchema, type ContactFormData } from "@/lib/validation";
 import { EmailService } from "@/lib/email-service";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const socials = [
   { name: "GITHUB", href: "https://github.com/TarcysAmorim", icon: Github },
@@ -18,6 +19,7 @@ export const Contact = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const { trackEvent } = useAnalytics();
 
   const {
     register,
@@ -39,6 +41,10 @@ export const Contact = () => {
 
     try {
       await EmailService.sendEmail(data);
+      trackEvent("contact_form_submit", {
+        event_category: "engagement",
+        event_label: "success",
+      });
       toast.success("Mensagem enviada!", {
         description: "Retorno em breve.",
         duration: 5000,
@@ -50,6 +56,11 @@ export const Contact = () => {
           ? error.message
           : "Erro ao enviar mensagem. Por favor, tente novamente.";
       setSubmitError(errorMessage);
+      trackEvent("contact_form_submit", {
+        event_category: "engagement",
+        event_label: "error",
+        error_message: errorMessage,
+      });
       toast.error("Erro ao enviar", {
         description: errorMessage,
         duration: 7000,
@@ -88,10 +99,10 @@ export const Contact = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mb-20"
           >
-            <h3 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] mb-8">
+            <h3 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] mb-8 relative z-10">
               VAMOS<br />
-              <span className="highlight-box">TRABALHAR</span><br />
-              <span className="text-outline">JUNTOS?</span>
+              <span className="highlight-box relative z-10">TRABALHAR</span><br />
+              <span className="text-outline relative z-10">JUNTOS?</span>
             </h3>
             <p className="text-xl text-muted-foreground max-w-xl">
               Tem um projeto em mente? Precisa de alguém para quebrar seu sistema 
@@ -120,13 +131,20 @@ export const Contact = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                  className="group flex items-center justify-between p-6 border-2 border-border hover:border-foreground hover:bg-foreground hover:text-background transition-all"
+                  className="group flex items-center justify-between p-6 border-2 border-border hover:border-foreground hover:bg-foreground hover:text-background transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  aria-label={`Visitar ${social.name}`}
+                  onClick={() => {
+                    trackEvent("social_click", {
+                      event_category: "engagement",
+                      event_label: social.name.toLowerCase(),
+                    });
+                  }}
                 >
                   <div className="flex items-center gap-4">
-                    <social.icon className="w-6 h-6" />
+                    <social.icon className="w-6 h-6" aria-hidden="true" />
                     <span className="text-xl font-bold">{social.name}</span>
                   </div>
-                  <ArrowUpRight className="w-6 h-6 group-hover:rotate-0 -rotate-45 transition-transform" />
+                  <ArrowUpRight className="w-6 h-6 group-hover:rotate-0 -rotate-45 transition-transform" aria-hidden="true" />
                 </motion.a>
               ))}
 
@@ -160,7 +178,19 @@ export const Contact = () => {
                 // ENVIE UMA MENSAGEM
               </p>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                {/* Error Message */}
+                {submitError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 bg-destructive/10 border-2 border-destructive flex items-start gap-3"
+                  >
+                    <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-destructive font-mono">{submitError}</p>
+                  </motion.div>
+                )}
+
                 <div>
                   <label htmlFor="name" className="block font-mono text-sm mb-2">
                     NOME *
@@ -168,13 +198,19 @@ export const Contact = () => {
                   <input
                     type="text"
                     id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                    className="w-full px-4 py-4 bg-secondary border-2 border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors font-mono"
+                    {...register("name")}
+                    className={`w-full px-4 py-4 bg-secondary border-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors font-mono ${
+                      errors.name ? "border-destructive" : "border-border"
+                    }`}
                     placeholder="Seu nome"
+                    aria-invalid={errors.name ? "true" : "false"}
+                    aria-describedby={errors.name ? "name-error" : undefined}
                   />
+                  {errors.name && (
+                    <p id="name-error" className="mt-2 text-sm text-destructive font-mono" role="alert">
+                      {errors.name.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -184,13 +220,19 @@ export const Contact = () => {
                   <input
                     type="email"
                     id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                    className="w-full px-4 py-4 bg-secondary border-2 border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors font-mono"
+                    {...register("email")}
+                    className={`w-full px-4 py-4 bg-secondary border-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors font-mono ${
+                      errors.email ? "border-destructive" : "border-border"
+                    }`}
                     placeholder="seu@email.com"
+                    aria-invalid={errors.email ? "true" : "false"}
+                    aria-describedby={errors.email ? "email-error" : undefined}
                   />
+                  {errors.email && (
+                    <p id="email-error" className="mt-2 text-sm text-destructive font-mono" role="alert">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -199,24 +241,31 @@ export const Contact = () => {
                   </label>
                   <textarea
                     id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    required
+                    {...register("message")}
                     rows={5}
-                    className="w-full px-4 py-4 bg-secondary border-2 border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors font-mono resize-none"
+                    className={`w-full px-4 py-4 bg-secondary border-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors font-mono resize-none ${
+                      errors.message ? "border-destructive" : "border-border"
+                    }`}
                     placeholder="Sua mensagem..."
+                    aria-invalid={errors.message ? "true" : "false"}
+                    aria-describedby={errors.message ? "message-error" : undefined}
                   />
+                  {errors.message && (
+                    <p id="message-error" className="mt-2 text-sm text-destructive font-mono" role="alert">
+                      {errors.message.message}
+                    </p>
+                  )}
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="magnetic-btn w-full py-5 flex items-center justify-center gap-3 disabled:opacity-50"
+                  className="magnetic-btn w-full py-5 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-busy={isSubmitting}
                 >
                   {isSubmitting ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin" />
+                      <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                       ENVIANDO...
                     </>
                   ) : (
@@ -237,9 +286,9 @@ export const Contact = () => {
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.5, delay: 1 }}
-        className="mt-32 border-t-2 border-foreground"
+        className="mt-8 md:mt-12 border-t-2 border-foreground"
       >
-        <div className="container mx-auto px-4 md:px-6 py-8">
+        <div className="container mx-auto px-4 md:px-6 py-4 md:py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="font-mono text-sm text-muted-foreground">
               © {new Date().getFullYear()} TARCYS AMORIM

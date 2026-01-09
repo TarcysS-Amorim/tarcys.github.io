@@ -38,11 +38,11 @@ export const Hero = () => {
       aria-label="Seção principal"
     >
       {/* Grid Background */}
-      <div className="absolute inset-0 grid-brutal opacity-30" aria-hidden="true" />
+      <div className="absolute inset-0 grid-brutal opacity-30 z-[1] pointer-events-none" aria-hidden="true" />
       
       {/* Floating shapes that follow cursor */}
       <motion.div
-        className="absolute w-96 h-96 border border-primary/20 rotate-45"
+        className="absolute w-96 h-96 border border-primary/20 rotate-45 z-[1] pointer-events-none"
         style={{
           left: mousePos.x * 0.02,
           top: mousePos.y * 0.02,
@@ -51,7 +51,7 @@ export const Hero = () => {
         aria-hidden="true"
       />
       <motion.div
-        className="absolute right-0 bottom-0 w-64 h-64 bg-primary/5"
+        className="absolute right-0 bottom-0 w-64 h-64 bg-primary/5 z-[1] pointer-events-none"
         style={{
           right: mousePos.x * 0.01,
           bottom: mousePos.y * 0.01,
@@ -61,7 +61,7 @@ export const Hero = () => {
       />
 
       {/* Main Content */}
-      <div className="flex-1 flex items-center relative z-10">
+      <div className="flex-1 flex items-center relative z-30">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-6xl">
             {/* Status */}
@@ -82,12 +82,12 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="mb-4"
+              className="mb-4 relative z-10"
             >
-              <h1 className="text-[clamp(3rem,15vw,12rem)] font-bold leading-[0.85] tracking-tighter">
-                <span className="text-outline block">TARCYS</span>
-                <span className="block">
-                  <span className="highlight-box">AMORIM</span>
+              <h1 className="text-[clamp(3rem,15vw,12rem)] font-bold leading-[0.85] tracking-tighter relative z-10">
+                <span className="text-outline block relative z-10">TARCYS</span>
+                <span className="block relative z-10">
+                  <span className="highlight-box relative z-10">AMORIM</span>
                 </span>
               </h1>
             </motion.div>
@@ -135,7 +135,8 @@ export const Hero = () => {
             >
               <button
                 onClick={scrollToProjects}
-                className="magnetic-btn px-8 py-4 text-sm"
+                className="magnetic-btn px-8 py-4 text-sm focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                aria-label="Ver trabalhos"
               >
                 VER TRABALHOS
               </button>
@@ -145,7 +146,8 @@ export const Hero = () => {
                   e.preventDefault();
                   document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="px-8 py-4 text-sm font-bold uppercase tracking-wider border-2 border-foreground hover:bg-foreground hover:text-background transition-colors"
+                className="px-8 py-4 text-sm font-bold uppercase tracking-wider border-2 border-foreground hover:bg-foreground hover:text-background transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                aria-label="Ir para contato"
               >
                 CONTATO
               </a>
@@ -163,8 +165,8 @@ export const Hero = () => {
       >
         <div className="marquee">
           <div className="marquee-content">
-            {[...Array(2)].map((_, i) => (
-              <div key={i} className="flex items-center gap-8 text-primary-foreground font-bold text-sm tracking-widest whitespace-nowrap">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex items-center gap-8 text-primary-foreground font-bold text-sm tracking-widest whitespace-nowrap flex-shrink-0">
                 <span>REACT</span>
                 <span className="text-2xl">◆</span>
                 <span>TYPESCRIPT</span>

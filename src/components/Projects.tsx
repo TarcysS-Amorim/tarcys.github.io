@@ -167,27 +167,27 @@ export const Projects = () => {
                             href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`p-3 border-2 transition-colors ${
+                            className={`p-3 border-2 transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                               hoveredIndex === index 
                                 ? "border-background hover:bg-background hover:text-foreground" 
                                 : "border-foreground hover:bg-foreground hover:text-background"
                             }`}
                             aria-label={`GitHub - ${project.title}`}
                           >
-                            <Github className="w-5 h-5" />
+                            <Github className="w-5 h-5" aria-hidden="true" />
                           </a>
                           <a
                             href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`p-3 border-2 transition-colors ${
+                            className={`p-3 border-2 transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                               hoveredIndex === index 
                                 ? "border-background bg-primary text-primary-foreground hover:bg-background hover:text-foreground" 
                                 : "border-foreground bg-primary text-primary-foreground"
                             }`}
                             aria-label={`Demo - ${project.title}`}
                           >
-                            <ExternalLink className="w-5 h-5" />
+                            <ExternalLink className="w-5 h-5" aria-hidden="true" />
                           </a>
                         </div>
                       </div>
