@@ -1,7 +1,11 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Github, Linkedin, Mail, ArrowUpRight, Send } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUpRight, Send, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { contactFormSchema, type ContactFormData } from "@/lib/validation";
+import { EmailService } from "@/lib/email-service";
 
 const socials = [
   { name: "GITHUB", href: "https://github.com/TarcysAmorim", icon: Github },
@@ -12,16 +16,47 @@ const socials = [
 export const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    toast.success("Mensagem enviada!", { description: "Retorno em breve." });
-    setFormData({ name: "", email: "", message: "" });
-    setIsSubmitting(false);
+    setSubmitError(null);
+
+    try {
+      await EmailService.sendEmail(data);
+      toast.success("Mensagem enviada!", {
+        description: "Retorno em breve.",
+        duration: 5000,
+      });
+      reset();
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Erro ao enviar mensagem. Por favor, tente novamente.";
+      setSubmitError(errorMessage);
+      toast.error("Erro ao enviar", {
+        description: errorMessage,
+        duration: 7000,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
