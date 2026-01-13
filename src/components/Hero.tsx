@@ -2,10 +2,10 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const roles = [
-  "FULL-STACK DEV",
-  "SECURITY RESEARCHER", 
-  "PROBLEM SOLVER",
-  "CODE BREAKER",
+  "CYBERSEC ENGINEER",
+  "SECURITY RESEARCHER",
+  "OFFENSE & DEFENSE",
+  "THREAT HUNTER",
 ];
 
 export const Hero = () => {
@@ -118,11 +118,11 @@ export const Hero = () => {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="text-lg md:text-xl text-muted-foreground max-w-xl mb-12 leading-relaxed"
             >
-              Construindo software que importa. 
-              Quebrando sistemas para torná-los mais fortes.
+              Endurecendo sistemas sem medo de sacrificar performance.
+              Explorando falhas para eliminar riscos reais.
               <br />
               <span className="text-foreground font-medium">
-                Código é arte. Segurança é ciência.
+                Segurança extrema. Resiliência inegociável.
               </span>
             </motion.p>
 

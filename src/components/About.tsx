@@ -2,7 +2,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const stats = [
-  { value: "03", label: "ANOS", suffix: "+" },
+  { value: "05", label: "ANOS", suffix: "+" },
   { value: "20", label: "PROJETOS", suffix: "+" },
   { value: "∞", label: "CAFÉ", suffix: "" },
 ];
@@ -42,20 +42,20 @@ export const About = () => {
               className="lg:col-span-7"
             >
               <h3 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-8">
-                DESENVOLVEDOR COM{" "}
+                ESPECIALISTA COM{" "}
                 <span className="text-outline">OBSESSÃO</span>{" "}
-                POR <span className="highlight-box">SEGURANÇA</span>
+                POR <span className="highlight-box">CYBERSEC</span>
               </h3>
               
               <div className="space-y-6 text-lg text-muted-foreground">
                 <p>
-                  Minha filosofia é simples: para proteger sistemas, você precisa 
-                  entender como quebrá-los. Combino desenvolvimento full-stack 
-                  com práticas de segurança ofensiva.
+                  Minha filosofia é simples: para proteger sistemas, você precisa
+                  entender como quebrá-los. Meu foco é segurança ofensiva e defensiva,
+                  com prioridade absoluta para robustez acima de performance.
                 </p>
                 <p>
-                  Cada linha de código que escrevo considera não apenas 
-                  funcionalidade, mas também as vulnerabilidades que ela pode criar.
+                  Cada decisão técnica considera ataque real, impacto operacional
+                  e mitigação agressiva. Prefiro camadas a mais do que um risco a menos.
                 </p>
               </div>
 
@@ -67,8 +67,8 @@ export const About = () => {
                 className="mt-12 pl-6 border-l-4 border-primary"
               >
                 <p className="text-xl md:text-2xl font-medium italic text-foreground">
-                  "O melhor hacker é aquele que pensa como um desenvolvedor. 
-                  O melhor desenvolvedor é aquele que pensa como um hacker."
+                  "O melhor defensor pensa como atacante.
+                  O melhor atacante entende cada camada do defensor."
                 </p>
               </motion.blockquote>
             </motion.div>
@@ -109,7 +109,7 @@ export const About = () => {
                 </div>
                 <div className="flex justify-between items-center border-b border-border pb-4">
                   <span className="font-mono text-sm text-muted-foreground">FOCO</span>
-                  <span className="font-medium">Full-Stack + Security</span>
+                  <span className="font-medium">Cybersecurity Total</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-border pb-4">
                   <span className="font-mono text-sm text-muted-foreground">STATUS</span>
@@ -131,7 +131,7 @@ export const About = () => {
                 transition={{ duration: 0.5, delay: 0.8 }}
                 className="mt-8 flex flex-wrap gap-2"
               >
-                {["Web Apps", "APIs", "Pentesting", "DevOps", "Automation", "CLI Tools"].map((tag) => (
+                {["Pentesting", "Red Team", "Blue Team", "Hardening", "Threat Intel", "Forensics"].map((tag) => (
                   <span
                     key={tag}
                     className="px-4 py-2 text-xs font-mono uppercase tracking-wider border-2 border-border hover:border-primary hover:text-primary transition-colors"

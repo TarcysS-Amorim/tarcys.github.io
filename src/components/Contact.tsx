@@ -105,8 +105,11 @@ export const Contact = () => {
               <span className="text-outline relative z-10">JUNTOS?</span>
             </h3>
             <p className="text-xl text-muted-foreground max-w-xl">
-              Tem um projeto em mente? Precisa de alguém para quebrar seu sistema 
-              (de forma legal)? Ou só quer trocar uma ideia?
+              Tem um projeto em mente? Precisa de alguém para estressar seu sistema
+              até o limite (de forma legal)? Ou só quer trocar uma ideia?
+              <span className="block mt-3 text-foreground font-medium">
+                Respondo rápido e com plano de ação objetivo.
+              </span>
             </p>
           </motion.div>
 

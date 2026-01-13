@@ -3,24 +3,24 @@ import { useRef } from "react";
 
 const skillGroups = [
   {
-    title: "FRONTEND",
-    skills: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Framer Motion"],
-    level: 90,
+    title: "OFFENSE",
+    skills: ["Pentesting", "Exploit Dev", "Red Team Ops", "Social Engineering", "CTF"],
+    level: 92,
   },
   {
-    title: "BACKEND",
-    skills: ["Node.js", "Python", "PostgreSQL", "Redis", "REST/GraphQL"],
+    title: "DEFENSE",
+    skills: ["Threat Hunting", "Incident Response", "SIEM", "EDR", "SOAR"],
+    level: 88,
+  },
+  {
+    title: "HARDENING",
+    skills: ["Zero Trust", "IAM", "Policy-as-Code", "Network Segmentation", "AppSec"],
     level: 85,
   },
   {
-    title: "SECURITY",
-    skills: ["Pentesting", "OWASP", "Burp Suite", "Network Analysis", "CTF"],
-    level: 80,
-  },
-  {
-    title: "DEVOPS",
-    skills: ["Docker", "Linux", "CI/CD", "AWS", "Git"],
-    level: 75,
+    title: "INFRA",
+    skills: ["Linux", "Cloud Security", "Containers", "Forensics", "Telemetry"],
+    level: 82,
   },
 ];
 
@@ -65,7 +65,7 @@ export const Expertise = () => {
               </h3>
               
               <p className="mt-8 text-muted-foreground text-lg">
-                Ferramentas e tecnologias que uso para transformar ideias em realidade.
+                Ferramentas e práticas que uso para maximizar resiliência, mesmo com custo de desempenho.
               </p>
             </motion.div>
 
@@ -135,7 +135,7 @@ export const Expertise = () => {
                   + OUTRAS FERRAMENTAS
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
-                  {["Wireshark", "Nmap", "Figma", "Nginx", "MongoDB", "Bash"].map((tool) => (
+                  {["Wireshark", "Nmap", "Burp Suite", "Ghidra", "Suricata", "YARA"].map((tool) => (
                     <span
                       key={tool}
                       className="px-4 py-2 text-xs font-mono border border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors"
